@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { TOKEN_COOKIE } from '@/constants/cookies'
 
 export default function middleware(request: NextRequest) {
-  const user = request.cookies.get(TOKEN_COOKIE)?.value
+  const token = request.cookies.get(TOKEN_COOKIE)?.value
 
-  if (!user) {
+  if (!token) {
     if (request.nextUrl.pathname === '/') {
       return NextResponse.next()
     }
