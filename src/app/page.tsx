@@ -7,9 +7,10 @@ import cookie from 'js-cookie'
 import Logo from '../assets/logo.png'
 import { Button } from '@/components/ui/button'
 import { CustomInput } from '@/components/custom-input'
-import { SignInProps, useSignIn } from '@/services/auth/useSignIn'
+import { Loader } from '@/components/loader'
 import { TOKEN_COOKIE } from '@/constants/cookies'
 import { USER_EMAIL_LOCAL_STORAGE } from '@/constants/localstorage'
+import { SignInProps, useSignIn } from '@/services/auth/useSignIn'
 
 export default function Login() {
   const router = useRouter()
@@ -18,7 +19,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInProps>()
-  const { mutateAsync } = useSignIn({
+  const { mutateAsync, isLoading } = useSignIn({
     onSuccess: (data) => {
       localStorage.setItem(USER_EMAIL_LOCAL_STORAGE, data.email)
       cookie.set(TOKEN_COOKIE, data.access_token)
@@ -60,8 +61,8 @@ export default function Login() {
               required: 'O e-mail não pode ficar em branco!',
             })}
           />
-          <Button type="submit" className="w-full rounded-xl" size="lg">
-            Entrar
+          <Button disabled={isLoading} type="submit" className="w-full">
+            {isLoading ? <Loader /> : 'Entrar'}
           </Button>
         </div>
       </form>

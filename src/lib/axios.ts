@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
       const token = cookie.get(TOKEN_COOKIE)
 
       if (token) {
-        config.headers.Authorization = token
+        config.headers.Authorization = `Bearer ${token}`
       }
 
       return config
