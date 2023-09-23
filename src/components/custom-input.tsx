@@ -1,16 +1,30 @@
-import { InputHTMLAttributes, forwardRef } from 'react'
+import { HTMLInputTypeAttribute, forwardRef } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { Input } from './ui/input'
+import { FormControl, FormField, FormItem, FormMessage } from './ui/form'
 
-interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error: string | undefined
+interface CustomInputProps {
+  form: UseFormReturn<any, any, undefined>
+  name: string
+  placeholder: string
+  type?: HTMLInputTypeAttribute
 }
 
-export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
-  ({ error, ...rest }, ref) => (
-    <div ref={ref} className="w-full flex flex-col gap-1">
-      <Input {...rest} />
-      {!!error && <p className="text-sm text-red-600">{error}</p>}
-    </div>
+export const CustomInput = forwardRef<any, CustomInputProps>(
+  ({ form, name, placeholder, type }, _) => (
+    <FormField
+      name={name}
+      control={form.control}
+      defaultValue=""
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <Input placeholder={placeholder} type={type} {...field} />
+          </FormControl>
+          <FormMessage className="text-red-600" />
+        </FormItem>
+      )}
+    />
   )
 )
 CustomInput.displayName = 'CustomInput'

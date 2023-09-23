@@ -1,7 +1,7 @@
 import { useMutation, UseMutationOptions } from 'react-query'
 import { api } from '@/lib/axios'
 
-export interface SignInProps {
+interface SignInProps {
   email: string
   password: string
 }
