@@ -57,9 +57,8 @@ export default function Login() {
               <p className="text-md">Faça login em sua conta</p>
             </div>
             <div className="flex flex-col gap-6 justify-center">
-              <CustomInput form={form} name="email" placeholder="E-mail" />
+              <CustomInput name="email" placeholder="E-mail" />
               <CustomInput
-                form={form}
                 name="password"
                 placeholder="Senha"
                 type="password"

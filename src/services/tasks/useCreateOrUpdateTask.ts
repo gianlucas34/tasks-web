@@ -2,9 +2,11 @@ import { useMutation, UseMutationOptions } from 'react-query'
 import { api } from '@/lib/axios'
 import { Task } from '@/entities/Task'
 
-const createTask = async (task: Task) => {
+const createOrUpdateTask = async (task: Task) => {
   try {
-    const { data } = await api.post('/tasks', task)
+    const route = task.id ? `/tasks/${task.id}` : '/tasks'
+    const method = task.id ? api.put : api.post
+    const { data } = await method(route, task)
 
     return data
   } catch (error: any) {
@@ -12,9 +14,9 @@ const createTask = async (task: Task) => {
   }
 }
 
-export const useCreateTask = (
+export const useCreateOrUpdateTask = (
   options?: Pick<
     UseMutationOptions<Task, string, Task>,
     'onSuccess' | 'onError'
   >
-) => useMutation<Task, string, Task>(createTask, options)
+) => useMutation<Task, string, Task>(createOrUpdateTask, options)

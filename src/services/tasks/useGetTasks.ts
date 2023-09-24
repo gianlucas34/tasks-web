@@ -16,7 +16,7 @@ export function useGetTasks<T = 'list' | 'show'>(
   id?: string,
   options?: Pick<
     UseQueryOptions<T extends 'list' ? Task[] : Task, string>,
-    'onSuccess' | 'onError'
+    'onSuccess' | 'onError' | 'enabled'
   >
 ) {
   const tasksCallback = async () => await getTasks(id)
