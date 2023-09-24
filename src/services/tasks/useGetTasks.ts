@@ -2,9 +2,18 @@ import { UseQueryOptions, useQuery } from 'react-query'
 import { api } from '@/lib/axios'
 import { Task } from '@/entities/Task'
 
-const getTasks = async (id?: string) => {
+interface GetTasksProps {
+  id?: string
+  priority?: Task['priority']
+}
+
+const getTasks = async (params?: GetTasksProps) => {
   try {
-    const { data } = await api.get('/tasks' + (id ? `/${id}` : ''))
+    const { data } = await api.get(
+      '/tasks' +
+        (params?.id ? `/${params.id}` : '') +
+        (params?.priority ? `?priority=${params.priority}` : '')
+    )
 
     return data
   } catch (error: any) {
@@ -13,16 +22,16 @@ const getTasks = async (id?: string) => {
 }
 
 export function useGetTasks<T = 'list' | 'show'>(
-  id?: string,
+  params?: GetTasksProps,
   options?: Pick<
     UseQueryOptions<T extends 'list' ? Task[] : Task, string>,
     'onSuccess' | 'onError' | 'enabled'
   >
 ) {
-  const tasksCallback = async () => await getTasks(id)
+  const tasksCallback = async () => await getTasks(params)
 
   return useQuery<T extends 'list' ? Task[] : Task, string>(
-    'tasks',
+    ['tasks', params?.priority],
     tasksCallback,
     options
   )

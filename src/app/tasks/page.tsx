@@ -1,19 +1,24 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { useQueryClient } from 'react-query'
 import { format, parseISO } from 'date-fns'
 import { Plus } from 'lucide-react'
+import { Task } from '@/entities/Task'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Loader } from '@/components/loader'
 import { useGetTasks } from '@/services/tasks/useGetTasks'
 import { handlePriorities } from '@/utils/handlePriorities'
 import { useDeleteTask } from '@/services/tasks/useDeleteTask'
+import { CustomSelectBasic } from '@/components/custom-select-basic'
 
 export default function TasksPage() {
+  const [priority, setPriority] = useState<Task['priority']>()
+
   const queryClient = useQueryClient()
-  const { data, isLoading } = useGetTasks<'list'>()
+  const { data, isLoading } = useGetTasks<'list'>({ priority })
   const { mutateAsync } = useDeleteTask({
     onSuccess: () => {
       toast('Tarefa deletada com sucesso!', { type: 'success' })
@@ -31,7 +36,21 @@ export default function TasksPage() {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="flex flex-col justify-center w-6/12 bg-zinc-800 p-6 rounded-md gap-4">
         <div className="flex items-center justify-between">
-          <Label className="text-xl">Minhas tarefas</Label>
+          <div className="flex flex-1 items-center gap-6">
+            <Label className="text-xl">Minhas tarefas</Label>
+            <div className="w-4/12">
+              <CustomSelectBasic
+                value={priority}
+                placeholder="Prioridade"
+                options={[
+                  { value: 'LOW', label: 'Baixa' },
+                  { value: 'MEDIUM', label: 'Média' },
+                  { value: 'HIGH', label: 'Alta' },
+                ]}
+                onChange={(value) => setPriority(value)}
+              />
+            </div>
+          </div>
           <Link href="/tasks/create">
             <Button>
               CRIAR <Plus className="w-4 h-4 ml-2" />

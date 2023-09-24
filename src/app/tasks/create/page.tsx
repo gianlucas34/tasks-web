@@ -36,9 +36,12 @@ export default function CreateTaskPage({ id }: { id?: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
-  const { data, isLoading: isLoadingTask } = useGetTasks<'show'>(id, {
-    enabled: !!id,
-  })
+  const { data, isLoading: isLoadingTask } = useGetTasks<'show'>(
+    { id },
+    {
+      enabled: !!id,
+    }
+  )
   const { mutateAsync, isLoading: isLoadingMutate } = useCreateOrUpdateTask({
     onSuccess: () => {
       toast(`Tarefa ${id ? 'atualizada' : 'criada'} com sucesso!`, {
