@@ -1,15 +1,29 @@
 'use client'
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { toast } from 'react-toastify'
+import { useQueryClient } from 'react-query'
 import { format, parseISO } from 'date-fns'
+import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Loader } from '@/components/loader'
 import { useGetTasks } from '@/services/tasks/useGetTasks'
 import { handlePriorities } from '@/utils/handlePriorities'
+import { useDeleteTask } from '@/services/tasks/useDeleteTask'
 
 export default function TasksPage() {
+  const queryClient = useQueryClient()
   const { data, isLoading } = useGetTasks<'list'>()
+  const { mutateAsync } = useDeleteTask({
+    onSuccess: () => {
+      toast('Tarefa deletada com sucesso!', { type: 'success' })
+
+      queryClient.invalidateQueries('tasks')
+    },
+    onError: (error) => {
+      toast(error, { type: 'error' })
+    },
+  })
 
   return isLoading ? (
     <Loader isLarge />
@@ -66,7 +80,10 @@ export default function TasksPage() {
                       Editar
                     </Button>
                   </Link>
-                  <Button className="bg-red-600 text-white hover:bg-red-600/80">
+                  <Button
+                    onClick={async () => await mutateAsync(task.id || '')}
+                    className="bg-red-600 text-white hover:bg-red-600/80"
+                  >
                     Deletar
                   </Button>
                 </div>
