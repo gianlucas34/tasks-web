@@ -1,5 +1,13 @@
 # TASKS WEB
 
+<table>
+  <tr>
+    <td><img src="/public/login.png" alt="Login" style="width: 250px;" /></td>
+    <td><img src="/public/list.png" alt="List" style="width: 250px;" /></td>
+    <td><img src="/public/task.png" alt="Task" style="width: 250px;" /></td>
+  </tr>
+</table>
+
 # Bibliotecas utilizadas
 
 <ul>
